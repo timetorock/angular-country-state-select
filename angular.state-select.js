@@ -66,22 +66,24 @@ angular.module('stateSelect', [])
 	restrict: "E",
 	template: '<select ng-options="c.code as c.name for c in states track by c.code">',
 	replace: true,
-	link: function(scope, elem, attrs) {
-		scope.states = states;
-		scope[attrs.ngModel] = scope.states[1];
-		
-		if (!!attrs.ngModel) {
-		var assignState = $parse(attrs.ngModel);
+		link: function(scope, elem, attrs) {
+			scope.states = states;
 
-		elem.bind('change', function(e) {
-			assignState(elem);
-		});
+			var model = $parse(attrs.ngModel);
+			model.assign(scope, states[1]);
 
-		scope.$watch(attrs.ngModel, function(state) {
-			elem.val(state);
+			if (!!attrs.ngModel) {
+				var assignState = $parse(attrs.ngModel);
 
-		});
+				elem.bind('change', function(e) {
+					assignState(elem);
+				});
+
+				scope.$watch(attrs.ngModel, function(state) {
+					elem.val(state);
+				});
+			}
+
 		}
-	}
 	}
 }]);

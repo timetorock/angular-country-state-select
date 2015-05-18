@@ -1,6 +1,6 @@
 angular.module('countrySelect', [])
   .directive('countrySelect', ['$parse', function($parse) {
-    var countries = [
+      var countries = [
       { code: "AF", name: "Afghanistan" },
       { code: "AX", name: "Åland Islands" },
       { code: "AL", name: "Albania" },
@@ -250,28 +250,27 @@ angular.module('countrySelect', [])
       { code: "YE", name: "Yemen" },
       { code: "ZM", name: "Zambia" },
       { code: "ZW", name: "Zimbabwe"}
-    ];
+      ];
 
-    return {
+      return {
       restrict: "E",
       template: '<select ng-options="c.code as c.name for c in countries track by c.code">',
       replace: true,
-      link: function(scope, elem, attrs) {
-        scope.countries = countries;
-        scope[attrs.ngModel] = scope.countries[ 234];
-        
-        if (!!attrs.ngModel) {
-          var assignCountry = $parse(attrs.ngModel);
+            link: function(scope, elem, attrs) {
+                  scope.countries = countries;
+                  var model = $parse(attrs.ngModel);
+                  model.assign(scope, countries[234]);
+                  if (!!attrs.ngModel) {
+                        var assignCountry = $parse(attrs.ngModel);
 
-          elem.bind('change', function(e) {
-            assignCountry(elem);
-          });
+                        elem.bind('change', function(e) {
+                              assignCountry(elem);
+                        });
 
-          scope.$watch(attrs.ngModel, function(country) {
-            elem.val(country);
-
-          });
-        }
+                        scope.$watch(attrs.ngModel, function(country) {
+                              elem.val(country);
+                        });
+                  }
+            }
       }
-    }
   }]);
