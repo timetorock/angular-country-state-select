@@ -64,24 +64,19 @@ angular.module('stateSelect', [])
 
 	return {
 	restrict: "E",
-	template: '<select ng-options="c.code as c.name for c in states track by c.code">',
+	template: '<select ng-options="c.name for c in states">',
 	replace: true,
 		link: function(scope, elem, attrs) {
 			scope.states = states;
 
-			var model = $parse(attrs.ngModel);
-			model.assign(scope, states[1]);
-
 			if (!!attrs.ngModel) {
+				
 				var assignState = $parse(attrs.ngModel);
-
+				assignState.assign(scope, states[1]);
 				elem.bind('change', function(e) {
 					assignState(elem);
 				});
-
-				scope.$watch(attrs.ngModel, function(state) {
-					elem.val(state);
-				});
+				
 			}
 
 		}
